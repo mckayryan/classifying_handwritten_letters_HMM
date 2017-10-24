@@ -154,7 +154,7 @@ class GenerativeClassifierHMM(BaseEstimator, ClassifierMixin):
         prob_post_norm = np.empty_like(log_post_unnorm)
 
         for i in range(log_post_unnorm.shape[1]):
-            prob_post_norm[:,i] = log_post_unnorm[:,i] - logsumexp(log_post_unnorm[:,i])
+            prob_post_norm[:,i] = log_post_unnorm[:,i] - logsumexp(log_post_unnorm[:,i].astype(np.float64))
                 
         return prob_post_norm
 
@@ -176,8 +176,4 @@ hmm_classifier.fit(xtrain, label_enc.transform(ytrain), np.tile(10, 20))
 test_pred_probs = hmm_classifier.predict_proba(xtest)
 predictions = pd.DataFrame(test_pred_probs.T)
 predictions.to_csv('./predictions.txt', header=False, index=False)
-
-# y_train_pred = label_enc.inverse_transform(hmm_classifier.predict(xtrain))
-# print('Training Accuracy', (y_train_pred == ytrain).mean())
-
 
